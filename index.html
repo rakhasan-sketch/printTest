@@ -4,18 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IoTNestBD Label Generator</title>
-    
-    <!-- Google Font for clean Bangla & English rendering -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Hind Siliguri', 'Segoe UI', Tahoma, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         body {
@@ -23,111 +17,119 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 30px 15px;
+            padding: 35px 15px;
         }
 
-        /* --- LABEL DESIGN (50mm x 75mm) --- */
+        /* --- 50mm x 75mm OUTER CONTAINER --- */
         .label-wrapper {
-            background: white;
             width: 50mm;
             height: 75mm;
-            padding: 2.5mm;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
             margin-bottom: 25px;
             display: flex;
-            flex-direction: row-reverse; /* Right to Left columns */
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
+        }
+
+        /* --- 75mm x 50mm HORIZONTAL CANVAS (ROTATED 90 DEG) --- */
+        .label-canvas {
+            width: 75mm;
+            height: 50mm;
+            min-width: 75mm;
+            min-height: 50mm;
+            transform: rotate(90deg);
+            padding: 2.5mm 3.5mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             color: #000;
+            background: #fff;
         }
 
-        /* Vertical Text Formatting */
-        .vertical-col {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-        }
-
-        /* Right Column: Brand & Speed Post */
-        .col-header {
+        /* Top Row: Brand & Speed Post */
+        .row-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 1.5px solid #000;
-            padding-left: 1.5mm;
-        }
-
-        .brand-box {
-            text-align: left;
-            line-height: 1.1;
+            border-bottom: 1.5px solid #000;
+            padding-bottom: 1.2mm;
         }
 
         .brand-title {
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            font-size: 17px;
+            font-weight: 900;
+            letter-spacing: -0.3px;
+            line-height: 1;
         }
 
         .brand-web {
             font-size: 8.5px;
             font-weight: 600;
+            margin-top: 2px;
         }
 
         .speed-post {
             background-color: #000;
             color: #fff;
-            font-weight: 700;
-            font-size: 13px;
-            padding: 8px 3px;
+            font-size: 13.5px;
+            font-weight: 900;
+            padding: 3px 8px;
             border-radius: 4px;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
-        /* Middle Column: Sender & Recipient */
-        .col-details {
-            flex-grow: 1;
+        /* Middle Row: Sender & Recipient */
+        .row-details {
             display: flex;
-            flex-direction: column;
             justify-content: space-between;
-            padding: 0 1.5mm;
-            border-left: 1.5px solid #000;
-            font-size: 10.5px;
-            line-height: 1.3;
+            flex-grow: 1;
+            padding: 1.5mm 0;
+            border-bottom: 1.5px solid #000;
         }
 
-        .sender-box, .recipient-box {
-            height: 48%;
-            overflow: hidden;
+        .col-half {
+            width: 48%;
+            font-size: 10.5px;
+            line-height: 1.28;
         }
 
         .sec-title {
-            font-weight: 700;
-            border-left: 1px solid #000;
-            padding-left: 2px;
-            margin-left: 3px;
-            display: inline-block;
+            font-weight: 800;
+            font-size: 10.5px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 1px;
+            margin-bottom: 3px;
+            display: block;
         }
 
-        /* Left Column: Footer Info */
-        .col-footer {
+        .bold-name {
+            font-weight: 800;
+            font-size: 11px;
+        }
+
+        /* Bottom Row: Category & Weight */
+        .row-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-right: 0.5mm;
+            padding-top: 1mm;
             font-size: 8.5px;
-            font-weight: 700;
+            font-weight: 800;
         }
 
-        /* --- FORM DESIGN --- */
+        /* --- FORM STYLING --- */
         .form-container {
             width: 100%;
-            max-width: 340px;
+            max-width: 325px;
         }
 
         .form-container h3 {
-            font-size: 16px;
+            font-size: 15px;
             margin-bottom: 12px;
             color: #222;
-            font-weight: 700;
+            font-weight: 800;
         }
 
         .form-group {
@@ -136,19 +138,20 @@
 
         .form-group label {
             display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #444;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #555;
             margin-bottom: 4px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 8px 10px;
+            padding: 7px 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 13px;
             background: #fff;
+            color: #111;
         }
 
         .print-btn {
@@ -156,19 +159,19 @@
             background-color: #635bff;
             color: white;
             border: none;
-            padding: 12px;
-            font-size: 15px;
-            font-weight: 600;
+            padding: 11px;
+            font-size: 13.5px;
+            font-weight: 700;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
         .print-btn:hover {
             background-color: #4b44e0;
         }
 
-        /* --- PRINT MEDIA QUERY (For Thermal Printer) --- */
+        /* --- PRINT MEDIA QUERY (50x75mm Thermal Printer) --- */
         @media print {
             @page {
                 size: 50mm 75mm;
@@ -198,43 +201,45 @@
 </head>
 <body>
 
-    <!-- THE LABEL (50x75mm) -->
+    <!-- THE LABEL -->
     <div class="label-wrapper">
-        
-        <!-- Right Side: Logo & Speed Post -->
-        <div class="vertical-col col-header">
-            <div class="brand-box">
-                <div class="brand-title">IoTNestBD</div>
-                <div class="brand-web">www.iotnestbd.com</div>
-            </div>
-            <div class="speed-post">SPEED POST</div>
-        </div>
-
-        <!-- Middle: Sender & Recipient -->
-        <div class="vertical-col col-details">
-            <div class="sender-box">
-                <span class="sec-title">প্রেরক (SENDER)</span>
-                <b>IoTNestBD</b><br>
-                Lohagara SO,<br>
-                Lohagara,Narail<br>
-                01638-692919
+        <div class="label-canvas">
+            
+            <!-- Header -->
+            <div class="row-header">
+                <div>
+                    <div class="brand-title">ioTNestBD</div>
+                    <div class="brand-web">www.iotnestbd.com</div>
+                </div>
+                <div class="speed-post">SPEED POST</div>
             </div>
 
-            <div class="recipient-box">
-                <span class="sec-title">প্রাপক (RECIPIENT)</span>
-                <b id="lbl-name">মোঃ রহিম উদ্দিন</b><br>
-                <span id="lbl-address">মিরপুর-১০, ব্লক সি</span><br>
-                <span id="lbl-city">ঢাকা - ১২১৬</span><br>
-                <span id="lbl-phone">০১৭০০০০০০০০</span>
+            <!-- Sender & Recipient -->
+            <div class="row-details">
+                <div class="col-half">
+                    <span class="sec-title">প্রেরক (SENDER)</span>
+                    <div class="bold-name">ioTNestBD</div>
+                    <div>Lohagara SO,</div>
+                    <div>Lohagara,Narail</div>
+                    <div>01638-692919</div>
+                </div>
+
+                <div class="col-half">
+                    <span class="sec-title">প্রাপক (RECIPIENT)</span>
+                    <div class="bold-name" id="lbl-name">মোঃ রহিম উদ্দিন</div>
+                    <div id="lbl-address">মিরপুর-১০, ব্লক সি</div>
+                    <div id="lbl-city">ঢাকা - ১২১৬</div>
+                    <div id="lbl-phone">০১৭০০০০০০০০</div>
+                </div>
             </div>
-        </div>
 
-        <!-- Left Side: Product & Weight -->
-        <div class="vertical-col col-footer">
-            <div>Product Category: Electronics Item</div>
-            <div>Weight: <span id="lbl-weight">100</span> g</div>
-        </div>
+            <!-- Footer -->
+            <div class="row-footer">
+                <div>Product Category: Electronics Item</div>
+                <div>Weight: <span id="lbl-weight">100</span> g</div>
+            </div>
 
+        </div>
     </div>
 
     <!-- THE FORM -->
@@ -269,7 +274,7 @@
         <button class="print-btn" onclick="window.print()">প্রিন্ট করুন (50x75mm)</button>
     </div>
 
-    <!-- JAVASCRIPT FOR LIVE UPDATE -->
+    <!-- LIVE UPDATE SCRIPT -->
     <script>
         function updateLabel() {
             document.getElementById('lbl-name').innerText = document.getElementById('in-name').value;
